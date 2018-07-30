@@ -5,6 +5,13 @@ var MatchGame = {};
   Renders a 4x4 board of cards.
 */
 
+$(document).ready(function() {
+  $('div.card').on('click', function() {
+  // Some behavior goes here
+});
+
+});
+
 /*
   Generates and returns an array of matching card values.
  */
