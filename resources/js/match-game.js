@@ -25,9 +25,9 @@ $(document).ready(function() {
 
  var random = [];
 
-   while (Numbers.Length > 0) {
+   while (Numbers.length > 0) {
     var randomNumber = Math.floor(Math.random() * Numbers.length);
-    var randomValue = Numbers.splice(randomNumber, 1);
+    var randomValue = Numbers.splice(randomNumber, 1)[0];
     random.push(randomValue);
    }
 
@@ -35,9 +35,6 @@ $(document).ready(function() {
  };
 
  MatchGame.generateCardValues();
-
-
-
 /*
   Converts card values to jQuery card objects and adds them to the supplied game
   object.
@@ -61,10 +58,10 @@ MatchGame.renderCards = function(random, $game) {
   $game.data('flippedCards', []);
 
   for (var valueIndex = 0; valueIndex < random.length; valueIndex++) {
-    var value = random[valueIndex];
-    var color = colors[i - 1];
+    var value = random[valueIndex]; //var value = random[valueIndex];
+    var color = colors[value - 1];
     var data = {
-      i: i,
+      value: value,
       color: color,
       isFlipped: false
     };
@@ -85,5 +82,38 @@ MatchGame.renderCards = function(random, $game) {
   Updates styles on flipped cards depending whether they are a match or not.
  */
 
-//MatchGame.flipCard = function($card, $game) {
-//}
+ MatchGame.flipCard = function($card, $game) {
+   if ($card.data('isFlipped')) {
+     return;
+   }
+
+   $card.css('background-color', $card.data('color'))
+       .text($card.data('value'))
+       .data('isFlipped', true);
+
+   var flippedCards = $game.data('flippedCards');
+   flippedCards.push($card);
+
+   if (flippedCards.length === 2) {
+     if (flippedCards[0].data('value') === flippedCards[1].data('value')) {
+       var matchCss = {
+         backgroundColor: 'rgb(153, 153, 153)',
+         color: 'rgb(204, 204, 204)'
+       };
+       flippedCards[0].css(matchCss);
+       flippedCards[1].css(matchCss);
+     } else {
+       var card1 = flippedCards[0];
+       var card2 = flippedCards[1];
+       window.setTimeout(function() {
+         card1.css('background-color', 'rgb(32, 64, 86)')
+             .text('')
+             .data('isFlipped', false);
+         card2.css('background-color', 'rgb(32, 64, 86)')
+             .text('')
+             .data('isFlipped', false);
+       }, 350);
+     }
+     $game.data('flippedCards', []);
+   }
+ };
