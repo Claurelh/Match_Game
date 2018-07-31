@@ -1,63 +1,83 @@
-var MatchGame = function{};
+var MatchGame = {};
 
-var MatchGame.generateCardValues = function() {
-  var Numbers = ["1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7", "8","8"];
-  for (var i = 1; i < 9; i++) {
-    order.push(i);
-    for (var c = 1; c < 2; c++) {
-      order.push(i);
-    }
-  }
-  let stop = order.length;
-  console.log(order);
-  var random = [];
-  while (stop > 0) {
-    var index = Math.round(Math.random());
-    random.push(order[index]);
-    order.slice(index,1);
-    stop--;
-  }
-  console.log(random);
-};
 /*
   Sets up a new game after HTML document has loaded.
   Renders a 4x4 board of cards.
 */
 
-// original array
-var Numbers = ["1", "1", "2", "2", "3", "3", "4", "4", "5", "5", "6", "6", "7", "7", "8","8"];
-
-(function)(){
-  //var Numbers2 = ["2", "6", "4", "8", "1", "3", "7", "5", "8", "6", "7", "2", "1", "4", "3", "5"];
-
-}
-
-.generateCardValues()
-
 $(document).ready(function() {
-
-
-
-
-
-
+  var $game = $('#game');
+  var values = MatchGame.generateCardValues();
+  MatchGame.renderCards(values, $game);
 });
+
 
 /*
   Generates and returns an array of matching card values.
  */
+ MatchGame.generateCardValues = function() {
+   var Numbers = [];
 
-MatchGame.generateCardValues = function () {
+   for (var i = 1; i <= 8; i++) {
+     Numbers.push(i);
+     Numbers.push(i);
+   }
 
-};
+ var random = [];
+
+   while (Numbers.Length > 0) {
+    var randomNumber = Math.floor(Math.random() * Numbers.length);
+    var randomValue = Numbers.splice(randomNumber, 1);
+    random.push(randomValue);
+   }
+
+   return random;
+ };
+
+ MatchGame.generateCardValues();
+
+
 
 /*
   Converts card values to jQuery card objects and adds them to the supplied game
   object.
 */
 
-MatchGame.renderCards = function(cardValues, $game) {
+// value = i
+// cardValues = random
 
+MatchGame.renderCards = function(random, $game) {
+  var colors = [
+    'hsl(25, 85%, 65%)',
+    'hsl(55, 85%, 65%)',
+    'hsl(90, 85%, 65%)',
+    'hsl(160, 85%, 65%)',
+    'hsl(220, 85%, 65%)',
+    'hsl(265, 85%, 65%)',
+    'hsl(310, 85%, 65%)',
+    'hsl(360, 85%, 65%)'];
+
+  $game.empty();
+  $game.data('flippedCards', []);
+
+  for (var valueIndex = 0; valueIndex < random.length; valueIndex++) {
+    var value = random[valueIndex];
+    var color = colors[i - 1];
+    var data = {
+      i: i,
+      color: color,
+      isFlipped: false
+    };
+
+    var $cardElement = $('<div class="col-xs-3 card"></div>');
+    $cardElement.data(data);
+
+    $game.append($cardElement);
+  }
+
+  $('.card').click(function() {
+    MatchGame.flipCard($(this), $('#game'));
+  });
 };
 
 /*
@@ -65,6 +85,5 @@ MatchGame.renderCards = function(cardValues, $game) {
   Updates styles on flipped cards depending whether they are a match or not.
  */
 
-MatchGame.flipCard = function($card, $game) {
-
-};
+//MatchGame.flipCard = function($card, $game) {
+//}
